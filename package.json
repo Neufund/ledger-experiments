@@ -1,0 +1,20 @@
+{
+  "name": "ledger-experiments",
+  "version": "1.0.0",
+  "description": "Experiment project to find and document various ledger use cases.",
+  "main": "index.js",
+  "repository": "git@github.com:Neufund/ledger-experiments.git",
+  "author": "Tomek Banach <tomek.banach@neufund.org>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "webpack-dev-server --config ./webpack.config.js"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^1.0.1",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1"
+  }
+}
