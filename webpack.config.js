@@ -6,7 +6,10 @@ module.exports = {
     entry: ["@babel/polyfill","./src/index.js"],
     plugins: [
         new CleanWebpackPlugin(["dist"]),
-        new HtmlWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            title: 'Ledger experiments',
+            template: 'src/index.html'
+        }),
     ],
     module: {
         rules: [

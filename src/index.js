@@ -6,13 +6,41 @@ import * as Web3 from "web3";
 import * as Web3ProviderEngine from "web3-provider-engine";
 import * as RpcSubprovider from "web3-provider-engine/subproviders/rpc";
 
-const infuraId = "xxx";
-const useRopsten = true;
 
-const rpcUrl = `https://${useRopsten ? "ropsten" : "mainnet"}.infura.io/v3/${infuraId}`;
 
-const myAddress = "xxx";
-const otherAddress = "xxx";
+const config = {
+    derivationPath: "44'/60'/0'/0",
+    infuraId: "xxx",
+    useRopsten: true
+};
+
+let rpcUrl = `https://${config.useRopsten ? "ropsten" : "mainnet"}.infura.io/v3/${config.infuraId}`;
+
+const handleChange = () => {
+    config.infuraId = infura.value;
+    config.derivationPath = dp.value;
+    config.useRopsten = useRp.checked;
+    rpcUrl = `https://${config.useRopsten ? "ropsten" : "mainnet"}.infura.io/v3/${config.infuraId}`;
+};
+
+const infura = document.getElementById("infura-id");
+infura.value = config.infuraId;
+infura.onchange = handleChange;
+
+const dp =  document.getElementById("derivation-path");
+dp.value = config.derivationPath;
+dp.onchange = handleChange;
+
+const useRp =  document.getElementById("use-ropsten");
+useRp.checked = config.useRopsten;
+useRp.onchange = handleChange;
+
+const getAddressButton =  document.getElementById("get-address");
+getAddressButton.onclick = async () => {
+    const addressElement = document.getElementById("address-field");
+    const ledgerAddress = await eth_address();
+    addressElement.value = ledgerAddress.address
+};
 
 const web3Callback = function(error, result){
     if(!error)
@@ -66,16 +94,17 @@ const eth_address = async function () {
     console.log("calling native app getAddress");
     const transport = await TransportU2F.create();
     const eth = new Eth(transport);
-    const address = await eth.getAddress("44'/60'/0'/0");
-    console.log("address", address);
+    const address = await eth.getAddress(config.derivationPath);
     transport.close();
+    console.log("address", address);
+    return address;
 };
 
 const eth_sign_personal = async function () {
     console.log("calling native app signPersonalMessage");
     const transport = await TransportU2F.create();
     const eth = new Eth(transport);
-    const signed = await eth.signPersonalMessage("44'/60'/0'/0", Buffer.from("test").toString("hex"));
+    const signed = await eth.signPersonalMessage(config.derivationPath, Buffer.from("test").toString("hex"));
     console.log("signed", signed);
     transport.close();
 };
