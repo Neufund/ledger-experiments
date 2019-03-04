@@ -67,6 +67,19 @@ document.getElementById("sign").onclick = async () => {
     }
 };
 
+// web3-getAccounts button
+document.getElementById("web3-getAccounts").onclick = async () => {
+    web3GetAccounts();
+};
+
+document.getElementById("web3-send-tx-button").onclick = async () => {
+    web3SendTx();
+};
+
+document.getElementById("web3-sign").onclick = async () => {
+    web3sign();
+};
+
 const web3Callback = function (error, result) {
     if (!error)
         console.log(JSON.stringify(result));
@@ -74,46 +87,105 @@ const web3Callback = function (error, result) {
         console.error(error);
 };
 
-const engine = new Web3ProviderEngine();
+const web3GetAccounts = function () {
+    const engine = new Web3ProviderEngine();
+    const getTransport = () => TransportU2F.create();
+    const ledgerProvider = createLedgerSubprovider(getTransport, {
+        networkId: 3,
+        accountsLength: 1,
+    });
+    engine.addProvider(ledgerProvider);
+    engine.addProvider(
+        new RpcSubprovider({
+            rpcUrl,
+        }),
+    );
 
-const getTransport = () => TransportU2F.create();
-const ledgerProvider = createLedgerSubprovider(getTransport, {
-    networkId: 3,
-    accountsLength: 1,
-});
+    engine.start();
+    const web3 = new Web3(engine);
+    console.log("web3 getAccounts");
 
+    web3.eth.getAccounts(function (error, result) {
+        if (!error) {
+            document.getElementById("web3-getAccounts-field").value = result[0];
+        } else {
+            document.getElementById("web3-getAccounts-error").innerHTML = error;
+            console.error(error);
+        }
+        engine.stop()
+    });
+};
 
-engine.addProvider(ledgerProvider);
-engine.addProvider(
-    new RpcSubprovider({
-        rpcUrl,
-    }),
-);
+const web3SendTx = function () {
+    const engine = new Web3ProviderEngine();
+    const getTransport = () => TransportU2F.create();
+    const ledgerProvider = createLedgerSubprovider(getTransport, {
+        networkId: 3,
+        accountsLength: 1,
+    });
+    engine.addProvider(ledgerProvider);
+    engine.addProvider(
+        new RpcSubprovider({
+            rpcUrl,
+        }),
+    );
 
-engine.start();
-const web3 = new Web3(engine);
+    engine.start();
+    const web3 = new Web3(engine);
+    console.log("web3 sendTransaction");
 
-// console.log("get balance");
-// web3.eth.getBalance(myAddress, web3Callback);
+    console.log("trying to send some transaction");
+    const tx = {
+        from: document.getElementById("web3-getAccounts-field").value,
+        to: document.getElementById("web3-send-tx-to").value,
+        value: 1000000000000,
+        gas: 21000,
+        gasPrice: 1000000000,
+    };
 
+    web3.eth.sendTransaction(tx, function (error, result) {
+        if (!error) {
+            document.getElementById("web3-send-tx-hash").value = result;
+        } else {
+            document.getElementById("web3-send-tx-error").innerHTML = error;
+            console.error(error);
+        }
+        engine.stop()
+    });
+};
 
-// console.log("calling for accounts");
-// web3.eth.getAccounts(web3Callback);
+const web3sign = function () {
+    const engine = new Web3ProviderEngine();
+    const getTransport = () => TransportU2F.create();
+    const ledgerProvider = createLedgerSubprovider(getTransport, {
+        networkId: 3,
+        accountsLength: 1,
+    });
+    engine.addProvider(ledgerProvider);
+    engine.addProvider(
+        new RpcSubprovider({
+            rpcUrl,
+        }),
+    );
 
+    engine.start();
+    const web3 = new Web3(engine);
+    console.log("trying to sign");
 
-// console.log("trying to send some transaction");
-// const tx = {
-//     from: myAddress,
-//     to: otherAddress,
-//     value: 100000000000000,
-//     gas: 21000,
-//     gasPrice: 1000000000,
-// };
-// web3.eth.sendTransaction(tx, web3Callback);
+    const address = document.getElementById("web3-getAccounts-field").value;
+    const thingToSign = web3.sha3("signing something");
+    // const thingToSign = "0x9dd2c369a187b4e6b9c402f030e50743e619301ea62aa4c0737d4ef7e10a3d49";
 
-
-// console.log("trying to sign something");
-// web3.eth.sign(myAddress, web3.sha3("signing something"), web3Callback);
+    web3.eth.sign(address, thingToSign, function (error, result) {
+        if (!error) {
+            document.getElementById("web3-sign-field").innerHTML = result;
+        } else {
+            document.getElementById("web3-sign-error").innerHTML = error;
+            console.error(error);
+        }
+        engine.stop()
+    });
+};
 
 const ethGetAppConfiguration = async function () {
     console.log("calling native app getAppConfiguration");
