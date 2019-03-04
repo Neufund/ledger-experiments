@@ -40,9 +40,24 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col">
-            <div class="input-group mb-3">
+            <h3>Following tests will use just "@ledgerhq/hw-app-eth" ledger library.</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-primary" role="alert">
+                Note that error are also thrown into console and there you can see whole error object.
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="input-group">
                 <div class="input-group-prepend">
                     <button id="get-address" class="btn btn-primary" type="button">Get address</button>
                 </div>
@@ -50,6 +65,40 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <div id="address-error"></div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-3">
+            <button id="get-configuration" class="btn btn-primary" type="button">Get configuration</button>
+        </div>
+        <div class="col">
+            <pre id="configuration-field"></pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="configuration-error"></div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-3">
+            <button id="sign" class="btn btn-primary" type="button">Sign</button>
+        </div>
+        <div class="col">
+            <pre id="sign-field"></pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="sign-error"></div>
+        </div>
+    </div>
+
 </div>
 </body>
 </html>
