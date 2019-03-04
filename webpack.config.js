@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
     entry: ["@babel/polyfill","./src/index.js"],
     plugins: [
-        new CleanWebpackPlugin(["dist"]),
+        new CleanWebpackPlugin(["docs"]),
         new HtmlWebpackPlugin({
             title: 'Ledger experiments',
             template: 'src/index.html'
@@ -23,7 +23,7 @@ module.exports = {
         ]
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'docs'),
         filename: 'bundle.js'
     },
     devServer: {

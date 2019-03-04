@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Ledger experiments</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>Ledger experiments</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h2>Configuration</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="infura-id">Infura id</label>
+                <input type="text" class="form-control" id="infura-id" placeholder="Put infura id here">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="derivation-path">Derivation path</label>
+                <input type="text" class="form-control" id="derivation-path" placeholder="Put derivation path here">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="use-ropsten" id="use-ropsten">
+                <label class="form-check-label" for="use-ropsten">
+                    Use Ropsten
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h3>Following tests will use just "@ledgerhq/hw-app-eth" ledger library.</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-primary" role="alert">
+                Note that error are also thrown into console and there you can see whole error object.
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button id="get-address" class="btn btn-primary" type="button">Get address</button>
+                </div>
+                <input id="address-field" type="text" class="form-control" placeholder="<- click me" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="address-error"></div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-3">
+            <button id="get-configuration" class="btn btn-primary" type="button">Get configuration</button>
+        </div>
+        <div class="col">
+            <pre id="configuration-field"></pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="configuration-error"></div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-3">
+            <button id="sign" class="btn btn-primary" type="button">Sign</button>
+        </div>
+        <div class="col">
+            <pre id="sign-field"></pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="sign-error"></div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript" src="bundle.js"></script></body>
+</html>
