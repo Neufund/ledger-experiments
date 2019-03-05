@@ -56,6 +56,17 @@ document.getElementById("get-configuration").onclick = async () => {
     }
 };
 
+// sign tx button
+document.getElementById("sign-tx").onclick = async () => {
+    try {
+        const signtx = await ethSignTransaction();
+        document.getElementById("sign-tx-field").innerHTML = JSON.stringify(signtx, null, 2)
+    } catch (error) {
+        document.getElementById("sign-tx-error").innerHTML = error;
+        throw error
+    }
+};
+
 // sign button
 document.getElementById("sign").onclick = async () => {
     try {
@@ -176,7 +187,28 @@ const web3SendTx = function () {
     console.log("web3 sendTransaction with contract data");
 
     const address = "0xF15090C01BEc877a122b567E5552504E5Fd22b79";
-    const abi = [{"constant":true,"inputs":[],"name":"getCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"increment","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_count","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
+    const abi = [{
+        "constant": true,
+        "inputs": [],
+        "name": "getCount",
+        "outputs": [{"name": "", "type": "uint256"}],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    }, {
+        "constant": false,
+        "inputs": [],
+        "name": "increment",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }, {
+        "inputs": [{"name": "_count", "type": "uint256"}],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    }];
 
     const txData = {
         from: document.getElementById("web3-getAccounts-field").value,
@@ -248,6 +280,17 @@ const ethGetAddress = async function () {
     transport.close();
     console.log("address", address);
     return address;
+};
+
+const ethSignTransaction = async function () {
+    console.log("calling native app signTransaction");
+    const transport = await TransportU2F.create();
+    const eth = new Eth(transport);
+    const txBin = "e8018504e3b292008252089428ee52a8f3d6e5d15f8b131996950d7f296c7952872bd72a2487400080";
+    const signedTx = await eth.signTransaction(config.derivationPath, txBin);
+    console.log("signed tx", signedTx);
+    transport.close();
+    return signedTx;
 };
 
 const ethSignPersonal = async function () {
