@@ -1,13 +1,13 @@
 # ledger-experiments
 Inside this repository you will find code that help you check some ledger corner cases.
 
-# device used in tests
+## device used in tests
 | device name  | secure element  | MCU  | eth app | can login to platform |
 |---|---|---|---|---|
 | dev nano 2 (nikola) |  1.4.2 |  1.5 | 1.1.8 | no |
 | tomek private | 1.5.5 | 1.7 | 1.1.9 | yes |
 
-# ledger states
+## ledger states
 not sure if any of those are distinct from each other smth to check
 - initial request for pin
 - app screen
@@ -17,7 +17,7 @@ not sure if any of those are distinct from each other smth to check
 - ethereum app blocked
 - ethereum app blocked request for pin
 
-# ledger exceptions
+## ledger exceptions
 
 ### when you decline sign on app eth
 ```
@@ -37,7 +37,6 @@ name: "TransportStatusError"
 stack: "" <- removed
 statusCode: 27264
 statusText: "INCORRECT_DATA"
-
 ```
 
 ### timeout
@@ -54,6 +53,22 @@ originalError: Error: Sign failed at makeError (webpack:///./node_modules/u2f-ap
 stack: "" <- removed
 ```
 
-#### notes for self:
+### ledger is locked
+You will get this error if you try to call `eth.getAddress`, `web3.getAccounts`, `web3.sendTransaction`. What's interesting if you would try to call `eth.signTransaction` or `eth.signPersonalMessage` you will be prompted to unlock device and will get a timeout. 
+
+```
+message: "Ledger device: UNKNOWN_ERROR (0x6804)"
+name: "TransportStatusError"
+stack: ""  <- removed
+statusCode: 26628
+statusText: "UNKNOWN_ERROR"
+```
+
+## notes:
+- Timeout is 30s and cannot be changed.
+- It works with Firefox you have to enable in `security.webauth.u2f` flag. You can access it through `about:config`.
+- If app is waiting for user action (approval / recjetion) you can create another actions and those would be put in queue. That might have some UI implications as we have be careful not to send double tx's.
+
+
+## small dev notes
 - create timeinterval with get config
-- if you click send tx very fast you will get two transactions to confirm one after another
