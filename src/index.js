@@ -72,6 +72,12 @@ document.getElementById("web3-getAccounts").onclick = async () => {
     web3GetAccounts();
 };
 
+// web3 send eth button
+document.getElementById("web3-send-eth-button").onclick = async () => {
+    web3SendEth();
+};
+
+// web3 send tx button
 document.getElementById("web3-send-tx-button").onclick = async () => {
     web3SendTx();
 };
@@ -116,7 +122,7 @@ const web3GetAccounts = function () {
     });
 };
 
-const web3SendTx = function () {
+const web3SendEth = function () {
     const engine = new Web3ProviderEngine();
     const getTransport = () => TransportU2F.create();
     const ledgerProvider = createLedgerSubprovider(getTransport, {
@@ -132,18 +138,55 @@ const web3SendTx = function () {
 
     engine.start();
     const web3 = new Web3(engine);
-    console.log("web3 sendTransaction");
-
-    console.log("trying to send some transaction");
+    console.log("web3 sendTransaction. Only eth transfer");
     const tx = {
         from: document.getElementById("web3-getAccounts-field").value,
-        to: document.getElementById("web3-send-tx-to").value,
+        to: document.getElementById("web3-send-eth-to").value,
         value: 1000000000000,
         gas: 21000,
         gasPrice: 1000000000,
     };
 
     web3.eth.sendTransaction(tx, function (error, result) {
+        if (!error) {
+            document.getElementById("web3-send-eth-hash").value = result;
+        } else {
+            document.getElementById("web3-send-eth-error").innerHTML = error;
+            console.error(error);
+        }
+        engine.stop()
+    });
+};
+
+const web3SendTx = function () {
+    const engine = new Web3ProviderEngine();
+    const getTransport = () => TransportU2F.create();
+    const ledgerProvider = createLedgerSubprovider(getTransport, {
+        networkId: 3,
+        accountsLength: 1,
+    });
+    engine.addProvider(ledgerProvider);
+    engine.addProvider(
+        new RpcSubprovider({
+            rpcUrl,
+        }),
+    );
+    engine.start();
+    const web3 = new Web3(engine);
+    console.log("web3 sendTransaction with contract data");
+
+    const address = "0xF15090C01BEc877a122b567E5552504E5Fd22b79";
+    const abi = [{"constant":true,"inputs":[],"name":"getCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"increment","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_count","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
+
+    const txData = {
+        from: document.getElementById("web3-getAccounts-field").value,
+        value: 0,
+        gas: 210000,
+        gasPrice: 1000000000,
+    };
+
+    const counter = web3.eth.contract(abi).at(address);
+    counter.increment.sendTransaction(txData, function (error, result) {
         if (!error) {
             document.getElementById("web3-send-tx-hash").value = result;
         } else {

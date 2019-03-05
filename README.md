@@ -29,6 +29,17 @@ statusCode: 27013
 statusText: "CONDITIONS_OF_USE_NOT_SATISFIED"
 ```
 
+### when contract data is turned off
+```
+TransportStatusError
+message: "Ledger device: Invalid data received (0x6a80)"
+name: "TransportStatusError"
+stack: "" <- removed
+statusCode: 27264
+statusText: "INCORRECT_DATA"
+
+```
+
 ### timeout
 ```
 id: "U2F_5"

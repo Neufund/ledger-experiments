@@ -123,7 +123,7 @@
 
     <div class="row mt-3">
         <div class="col">
-            <h4>web3 send transaction</h4>
+            <h4>web3 send eth </h4>
             <p>You need to click getAccounts first and pass address</p>
         </div>
     </div>
@@ -131,10 +131,36 @@
         <div class="col">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" id="">"to" address</span>
+                    <span class="input-group-text">"to" address</span>
                 </div>
-                <input type="text" class="form-control" id="web3-send-tx-to">
+                <input type="text" class="form-control" id="web3-send-eth-to">
             </div>
+        </div>
+    </div>
+    <div class="row mt-1">
+        <div class="col">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button id="web3-send-eth-button" class="btn btn-primary" type="button">web3 send eth</button>
+                </div>
+                <input id="web3-send-eth-hash" type="text" class="form-control" placeholder="<- click me" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <pre id="web3-send-eth-error"></pre>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col">
+            <h4>web3 send eth transaction</h4>
+            <p>You need to click getAccounts first.</p>
+            <p>It will send transaction to smart contract described <a
+                    href="https://programtheblockchain.com/posts/2017/12/13/building-decentralized-apps-with-ethereum-and-javascript/">here</a>,
+                <a href="https://ropsten.etherscan.io/address/0xf15090c01bec877a122b567e5552504e5fd22b79">etherscan
+                    link</a></p>
         </div>
     </div>
     <div class="row mt-1">
